@@ -20,8 +20,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
-        // kod za ispis trenutnog stanja permission-a u TitlBar-u
+        //kod za ispis trenutnog stanja permission-a u TitlBar-u
         Context c = getApplicationContext();
         if (c.getPackageManager().checkPermission(Manifest.permission.CAMERA, getPackageName())
                 == PackageManager.PERMISSION_GRANTED) {
@@ -32,21 +31,43 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
 
-        // kod za proveru permission-a
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA)) {
-            } else {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, PERMISSIONS_REQUEST_CAMERA);
-            }
-        } else {
+
+            // ako treba dodatno objasniti razlog permission-a
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.CAMERA)) {
+                // ... objašnjenje korisniku
+
+
+            }else ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.CAMERA},
+                    PERMISSIONS_REQUEST_CAMERA);
         }
     }
 
 
-    // implicitno slanje intenta
+    // provera prava pristupa, prisutnosti kamere i implicitno slanje intenta
     public void btnStartCameraClicked(View view) {
-        Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivity(i);
+
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.CAMERA},
+                    PERMISSIONS_REQUEST_CAMERA);
+        }
+
+        Context checkCamera = getApplicationContext();
+        if (checkCamera.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)){
+            // ako je kamera prisutna ...
+            Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivity(i);
+        } else {
+            // ako kamera nije prisutna ...
+            return;
+        }
     }
 }

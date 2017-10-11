@@ -31,22 +31,26 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
+
+        // provera prava pristupa
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED) {
 
 
-            // ako treba dodatno objasniti razlog permission-a
+            // ako treba dodatno objasniti razlog pristupa
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                     Manifest.permission.CAMERA)) {
                 // ... objašnjenje korisniku
 
 
+            //aktivira se mali prozor za odobravanje pristupa
             }else ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.CAMERA},
                     PERMISSIONS_REQUEST_CAMERA);
         }
     }
+
 
 
     // provera prava pristupa, prisutnosti kamere i implicitno slanje intenta

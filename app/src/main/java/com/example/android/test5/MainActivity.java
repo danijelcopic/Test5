@@ -19,18 +19,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        //kod za ispis trenutnog stanja permission-a u TitlBar-u
-        Context c = getApplicationContext();
-        if (c.getPackageManager().checkPermission(Manifest.permission.CAMERA, getPackageName())
-                == PackageManager.PERMISSION_GRANTED) {
-            setTitle("DOZVOLJENO...");
-        } else
-            setTitle("NIJE DOZVOLJENO...");
-
         setContentView(R.layout.activity_main);
-
-
 
         // provera prava pristupa
         if (ContextCompat.checkSelfPermission(this,
@@ -49,6 +38,20 @@ public class MainActivity extends AppCompatActivity {
                     new String[]{Manifest.permission.CAMERA},
                     PERMISSIONS_REQUEST_CAMERA);
         }
+    }
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        //kod za ispis trenutnog stanja permission-a u TitlBar-u
+        Context c = getApplicationContext();
+        if (c.getPackageManager().checkPermission(Manifest.permission.CAMERA, getPackageName())
+                == PackageManager.PERMISSION_GRANTED) {
+            setTitle("DOZVOLJENO...");
+        } else
+            setTitle("NIJE DOZVOLJENO...");
     }
 
 
